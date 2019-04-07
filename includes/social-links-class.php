@@ -20,10 +20,29 @@ class Social_Links_Widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-        // outputs the content of the widget
-        ?>
-            TEST FRONTEND
-        <?php
+
+        $links = array( 
+            'facebook' => esc_attr($instance['facebook_link']),
+            'instagram' => esc_attr($instance['instagram_link']),
+            'twitter' => esc_attr($instance['twitter_link']),
+            'pinterest' => esc_attr($instance['pinterest_link']),
+        );
+            
+        $icons = array( 
+            'facebook' => esc_attr($instance['facebook_icon']),
+            'instagram' => esc_attr($instance['instagram_icon']),
+            'twitter' => esc_attr($instance['twitter_icon']),
+            'pinterest' => esc_attr($instance['pinterest_icon']),
+        );
+
+        $icon_width = $instance['icon_width'];
+
+        echo $args['before_widet'];
+
+        // Call frontend function
+        $this->getSocialLinks($links, $icons, $icon_width);
+
+        echo $args['after_widet'];
 	}
 
 	/**
@@ -46,7 +65,20 @@ class Social_Links_Widget extends WP_Widget {
 	 * @return array
 	 */
 	public function update( $new_instance, $old_instance ) {
-		// processes widget options to be saved
+        // processes widget options to be saved
+        $instance = array(
+            'facebook_link' => (!empty($new_instance['facebook_link'])) ? strip_tags($new_instance['facebook_link']) : '',
+            'instagram_link' => (!empty($new_instance['instagram_link'])) ? strip_tags($new_instance['instagram_link']) : '',
+            'twitter_link' => (!empty($new_instance['twitter_link'])) ? strip_tags($new_instance['twitter_link']) : '',
+            'pinterest_link' => (!empty($new_instance['pinterest_link'])) ? strip_tags($new_instance['pinterest_link']) : '',
+            'facebook_icon' => (!empty($new_instance['facebook_icon'])) ? strip_tags($new_instance['facebook_icon']) : '',
+            'instagram_icon' => (!empty($new_instance['instagram_icon'])) ? strip_tags($new_instance['instagram_icon']) : '',
+            'twitter_icon' => (!empty($new_instance['twitter_icon'])) ? strip_tags($new_instance['twitter_icon']) : '',
+            'pinterest_icon' => (!empty($new_instance['pinterest_icon'])) ? strip_tags($new_instance['pinterest_icon']) : '',
+            'icon_width' => (!empty($new_instance['icon_width'])) ? strip_tags($new_instance['icon_width']) : '',
+        );
+
+        return $instance;
     }
     
     /**
@@ -88,25 +120,25 @@ class Social_Links_Widget extends WP_Widget {
         if(isset($instance['facebook_icon'])){
             $facebook_icon = esc_attr($instance['facebook_icon']);
         } else {
-            $facebook_icon = plugins_url() . '/social-links/img/facebook.png';
+            $facebook_icon = plugins_url() . '/social-links-widget/img/facebook.png';
         }
         // Get Instagram Icon
         if(isset($instance['instagram_icon'])){
             $instagram_icon = esc_attr($instance['instagram_icon']);
         } else {
-            $instagram_icon = plugins_url() . '/social-links/img/instagram.png';
+            $instagram_icon = plugins_url() . '/social-links-widget/img/instagram.png';
         }
         // Get Twitter Icon
         if(isset($instance['twitter_icon'])){
             $twitter_icon = esc_attr($instance['twitter_icon']);
         } else {
-            $twitter_icon = plugins_url() . '/social-links/img/twitter.png';
+            $twitter_icon = plugins_url() . '/social-links-widget/img/twitter.png';
         }
         // Get Pinterest Icon
         if(isset($instance['pinterest_icon'])){
             $pinterest_icon = esc_attr($instance['pinterest_icon']);
         } else {
-            $pinterest_icon = plugins_url() . '/social-links/img/pinterest.png';
+            $pinterest_icon = plugins_url() . '/social-links-widget/img/pinterest.png';
         }
 
         // Get Icon Width
@@ -157,5 +189,27 @@ class Social_Links_Widget extends WP_Widget {
 
         <?php
         
-	}
+    }
+    
+    /**
+	 * Gets and displays Socail Icons
+	 *
+	 * @param array $links Social Links
+     * @param array $icons Social Icons
+	 * @param array $icon_width Width of Icons    
+     */
+	public function getSocialLinks( $links, $icons, $icon_width ) {
+        ?>
+            <div class="social-links">
+                <a href="<?php echo esc_attr($links['facebook']) ?>" target="_blank"> <img width="<?php echo esc_attr($icon_width); ?>" src="<?php echo esc_attr($icons['facebook']) ?>" alt=""> </a>
+                
+                <a href="<?php echo esc_attr($links['instagram']) ?>" target="_blank"> <img width="<?php echo esc_attr($icon_width); ?>" src="<?php echo esc_attr($icons['instagram']) ?>" alt=""> </a>
+                
+                <a href="<?php echo esc_attr($links['twitter']) ?>" target="_blank"> <img width="<?php echo esc_attr($icon_width); ?>" src="<?php echo esc_attr($icons['twitter']) ?>" alt=""> </a>
+                
+                <a href="<?php echo esc_attr($links['pinterest']) ?>" target="_blank"> <img width="<?php echo esc_attr($icon_width); ?>" src="<?php echo esc_attr($icons['pinterest']) ?>" alt=""> </a>
+            </div>
+            
+        <?php
+    }
 }
